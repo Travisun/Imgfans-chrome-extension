@@ -45,6 +45,7 @@ export default defineConfig({
     build: {
         outDir: 'dist',
         emptyOutDir: true,
+        cssCodeSplit: false, // 禁用 CSS 代码分割
         rollupOptions: {
             input: {
                 popup: resolve(__dirname, 'src/popup/index.html')
@@ -52,7 +53,12 @@ export default defineConfig({
             output: {
                 entryFileNames: 'assets/[name].js',
                 chunkFileNames: 'assets/[name].[hash].js',
-                assetFileNames: 'assets/[name].[ext]'
+                assetFileNames: (assetInfo) => {
+                    if (assetInfo.name === 'style.css') {
+                        return 'assets/[name].[ext]'
+                    }
+                    return 'assets/[name].[hash].[ext]'
+                }
             }
         }
     }

@@ -3,6 +3,9 @@
   "name": "Vue3 Chrome Extension",
   "version": "1.0.0",
   "description": "A simple Chrome extension built with Vue 3",
+  "permissions": [
+    "storage"
+  ],
   "action": {
     "default_popup": "src/popup/index.html",
     "default_icon": {
