@@ -1,5 +1,5 @@
 // API 基础配置
-const API_BASE_URL = 'http://127.0.0.1:8000/api/v1'
+const API_BASE_URL = 'https://imgfans.com/api/v1'
 
 export async function fetchUserInfo(apiKey) {
     try {
