@@ -7,7 +7,7 @@
       </div>
 
       <div v-show="activeTab === 'settings'" class="p-4">
-        <SettingsForm />
+        <SettingsForm  @settings-saved="handleSettingsSaved" />
       </div>
     </div>
 
@@ -56,4 +56,14 @@ import SettingsForm from './SettingsForm.vue'
 import HomeView from "./HomeView.vue";
 
 const activeTab = ref('home')
+const homeView = ref(null)
+
+// 处理设置保存成功
+const handleSettingsSaved = () => {
+  // 切换到 home 标签
+  activeTab.value = 'home'
+  // 刷新 home 页面数据
+  homeView.value?.refreshData()
+}
+
 </script>
