@@ -70,9 +70,9 @@ function createCopyDialog(fileInfo) {
     dialog.innerHTML = `
     <div class="imgfans-copy-dialog">
       <button class="imgfans-close-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
+        <svg  class="x0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line class="x0" x1="18" y1="6" x2="6" y2="18"></line>
+          <line  class="x0" x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
       <h3>Copy Link</h3>
@@ -95,7 +95,7 @@ function createCopyDialog(fileInfo) {
                 .then(() => createToast('Copied to clipboard!'))
                 .catch(() => createToast('Failed to copy'));
         } else if (
-            e.target.matches('.imgfans-close-button') ||
+            e.target.matches('.imgfans-close-button') || e.target.matches('.x0') ||
             e.target.matches('.imgfans-copy-overlay')
         ) {
             dialog.remove();
