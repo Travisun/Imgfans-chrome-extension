@@ -27,7 +27,7 @@
     </div>
 
     <!-- 已配置 API Key 的状态 -->
-    <div v-else-if="userData" class="h-full overflow-auto">
+    <div v-else-if="userData" class="h-full overflow-auto custom-scrollbar">
       <!-- 用户信息头部 -->
       <div class="bg-gradient-to-b from-blue-500 to-blue-600 text-white p-6">
         <div class="flex items-center space-x-4">

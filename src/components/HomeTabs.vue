@@ -3,7 +3,7 @@
     <!-- Content Panels -->
     <div class="flex-1 overflow-auto">
       <div v-show="activeTab === 'home'" class="h-full">
-        <HomeView :onSettingsClick="() => activeTab = 'settings'" />
+        <HomeView ref="homeViewRef" :onSettingsClick="() => activeTab = 'settings'" />
       </div>
 
       <div v-show="activeTab === 'settings'" class="p-4">
@@ -56,14 +56,16 @@ import SettingsForm from './SettingsForm.vue'
 import HomeView from "./HomeView.vue";
 
 const activeTab = ref('home')
-const homeView = ref(null)
+const homeViewRef = ref(null)
 
 // 处理设置保存成功
 const handleSettingsSaved = () => {
   // 切换到 home 标签
   activeTab.value = 'home'
   // 刷新 home 页面数据
-  homeView.value?.refreshData()
+  console.log(2000)
+  console.log(homeViewRef)
+  homeViewRef.value?.refreshData()
 }
 
 </script>
