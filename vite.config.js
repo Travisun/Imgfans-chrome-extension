@@ -80,10 +80,6 @@ export default defineConfig({
                     resolve(__dirname, 'dist/src/popup/index.html'),
                     resolve(__dirname, 'dist/popup/index.html')
                 )
-                copyFiles(
-                    resolve(__dirname, 'src/content/content.css'),
-                    resolve(__dirname, 'dist/content/content.css')
-                )
 
                 // 清理空目录
                 try {

@@ -66,26 +66,48 @@ function createToast(message, duration = 3000) {
 // 创建复制对话框
 function createCopyDialog(fileInfo) {
     const dialog = document.createElement('div');
-    dialog.className = 'imgfans-copy-overlay';
+    dialog.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-[999999] backdrop-blur-sm';
     dialog.innerHTML = `
-    <div class="imgfans-copy-dialog">
-      <button class="imgfans-close-button">
-        <svg  class="x0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line class="x0" x1="18" y1="6" x2="6" y2="18"></line>
-          <line  class="x0" x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-      <h3>Copy Link</h3>
-      <div class="imgfans-copy-options">
-        ${Object.entries(fileInfo.references).map(([key, value]) => `
-          <div class="imgfans-copy-item">
-            <span>${value.label}</span>
-            <button data-copy="${encodeURIComponent(value.code)}">Copy</button>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
+        <div class="w-full max-w-2xl mx-4 bg-white rounded-2xl shadow-2xl transform transition-all">
+            <div class="relative p-6">
+                <!-- 关闭按钮 -->
+                <button class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" 
+                        stroke="currentColor" stroke-width="2" class="text-gray-500">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+
+                <!-- 标题 -->
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900">Share Link</h3>
+                    <p class="mt-1 text-sm text-gray-500">Choose your preferred format below</p>
+                </div>
+
+                <!-- 选项列表 -->
+                <div class="space-y-4">
+                    ${Object.entries(fileInfo.references).map(([key, value]) => `
+                        <div class="group relative rounded-xl border border-gray-200 hover:border-indigo-500 transition-all duration-200">
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-700">${value.label}</span>
+                                    <button 
+                                        data-copy="${encodeURIComponent(value.code)}"
+                                        class="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors duration-200"
+                                    >
+                                        Copy Code
+                                    </button>
+                                </div>
+                                <pre class="mt-2 p-3 bg-gray-50 rounded-lg text-sm font-mono text-gray-600 overflow-x-auto">${value.code}</pre>
+                            </div>
+                            <div class="absolute inset-0 border-2 border-indigo-500 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"></div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
 
     // 处理复制按钮点击
     dialog.addEventListener('click', (e) => {

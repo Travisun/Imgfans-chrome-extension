@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npx tailwindcss -i ./src/content/style.css -o ./dist/content/content.css",
     "serve": "vite preview",
-    "watch": "vite build --watch"
+    "watch": "vite build --watch && npm run watch:css"
   },
   "dependencies": {
     "vue": "^3.3.4"
