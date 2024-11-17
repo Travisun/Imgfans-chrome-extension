@@ -2,13 +2,8 @@
   <div class="w-[350px] h-[500px] bg-white flex flex-col">
     <!-- Content Panels -->
     <div class="flex-1 overflow-auto">
-      <div v-show="activeTab === 'home'" class="p-4">
-        <div class="flex flex-col items-center justify-center h-full space-y-4">
-          <h2 class="text-2xl font-semibold text-gray-800">Welcome</h2>
-          <p class="text-gray-600 text-center">
-            This is your extension's home page. Add your main content here.
-          </p>
-        </div>
+      <div v-show="activeTab === 'home'" class="h-full">
+        <HomeView :onSettingsClick="() => activeTab = 'settings'" />
       </div>
 
       <div v-show="activeTab === 'settings'" class="p-4">
@@ -58,6 +53,7 @@
 <script setup>
 import { ref } from 'vue'
 import SettingsForm from './SettingsForm.vue'
+import HomeView from "./HomeView.vue";
 
 const activeTab = ref('home')
 </script>

@@ -63,6 +63,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+const emit = defineEmits(['settings-saved'])
+
 const apiKey = ref('')
 const isSaving = ref(false)
 const saveStatus = ref('')
@@ -124,6 +126,9 @@ const saveSettings = async () => {
 
     saveStatus.value = 'Settings saved successfully'
     statusClass.value = 'text-green-600'
+
+    // 触发保存成功事件
+    emit('settings-saved')
 
     // 3秒后清除状态消息
     setTimeout(() => {
