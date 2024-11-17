@@ -1,3 +1,6 @@
+// 保存按钮引用
+let uploadButton = null;
+
 // 创建漂浮按钮
 function createFloatingButton() {
     const button = document.createElement('div');
@@ -11,6 +14,41 @@ function createFloatingButton() {
   `;
     document.body.appendChild(button);
     return button;
+}
+
+// 更新上传进度UI
+function updateUploadProgress(progress) {
+    if (!uploadButton) return;
+
+    if (progress < 100) {
+        // 确保移除等待状态
+        uploadButton.classList.remove('waiting');
+        // 添加上传状态
+        uploadButton.classList.add('uploading');
+
+        // 通过 CSS 变量更新进度（可选）
+        uploadButton.style.setProperty('--upload-progress', `${progress}%`);
+
+        // 如果进度接近完成，预先添加等待状态
+        if (progress >= 98) {
+            uploadButton.classList.remove('uploading');
+            uploadButton.classList.add('waiting');
+        }
+    } else {
+        // 切换到等待状态
+        uploadButton.classList.remove('uploading');
+        uploadButton.classList.add('waiting');
+    }
+}
+
+// 重置按钮状态
+function resetButtonState() {
+    if (!uploadButton) return;
+
+    // 移除所有状态类
+    uploadButton.classList.remove('uploading', 'waiting');
+    // 清除进度变量
+    uploadButton.style.removeProperty('--upload-progress');
 }
 
 // 创建提示框
@@ -66,7 +104,6 @@ function createCopyDialog(fileInfo) {
 
     document.body.appendChild(dialog);
 }
-
 // 上传文件
 async function uploadFile(file) {
     const formData = new FormData();
@@ -85,57 +122,83 @@ async function uploadFile(file) {
             return;
         }
 
-        const response = await fetch('https://imgfans.com/api/v1/upload', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`
-            },
-            body: formData
-        });
+        // 创建 XHR 请求来监控上传进度
+        const xhr = new XMLHttpRequest();
 
-        if (!response.ok) {
-            throw new Error('Upload failed');
-        }
 
-        const result = await response.json();
-        if (result.success) {
-            createToast('Upload successful!');
-            createCopyDialog(result.file);
-        } else {
-            throw new Error('Upload failed');
-        }
+        // 修改上传文件函数中的进度处理部分
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const progress = Math.round((event.loaded / event.total) * 100);
+                updateUploadProgress(progress);
+
+                // 当上传完成时（但还在等待服务器响应）
+                if (progress >= 100) {
+                    updateUploadProgress(100); // 触发等待状态
+                }
+            }
+        };
+
+        // 确保在请求完成时重置状态
+        xhr.onloadend = () => {
+            if (xhr.status === 200) {
+                const result = JSON.parse(xhr.responseText);
+                if (result.success) {
+                    setTimeout(() => {
+                        resetButtonState();
+                        createToast('Upload successful!');
+                        createCopyDialog(result.file);
+                    }, 500); // 添加小延迟使过渡更平滑
+                } else {
+                    resetButtonState();
+                    createToast('Upload failed');
+                }
+            } else {
+                resetButtonState();
+                createToast('Upload failed');
+            }
+        };
+
+        // 发起请求
+        xhr.open('POST', 'https://imgfans.com/api/v1/upload');
+        xhr.setRequestHeader('Authorization', `Bearer ${apiKey}`);
+        xhr.send(formData);
+
     } catch (error) {
         console.error('Upload error:', error);
+        resetButtonState();
         createToast('Failed to upload file');
     }
 }
 
+
 // 初始化
 function init() {
-    const button = createFloatingButton();
+    // 创建按钮并保存引用
+    uploadButton = createFloatingButton();
 
     // 处理拖拽事件
     document.addEventListener('dragover', (e) => {
         e.preventDefault();
-        const buttonRect = button.getBoundingClientRect();
+        const buttonRect = uploadButton.getBoundingClientRect();
         const isOverButton =
             e.clientX >= buttonRect.left &&
             e.clientX <= buttonRect.right &&
             e.clientY >= buttonRect.top &&
             e.clientY <= buttonRect.bottom;
 
-        button.classList.toggle('drag-over', isOverButton);
+        uploadButton.classList.toggle('drag-over', isOverButton);
     });
 
     document.addEventListener('dragleave', () => {
-        button.classList.remove('drag-over');
+        uploadButton.classList.remove('drag-over');
     });
 
     document.addEventListener('drop', (e) => {
         e.preventDefault();
-        button.classList.remove('drag-over');
+        uploadButton.classList.remove('drag-over');
 
-        const buttonRect = button.getBoundingClientRect();
+        const buttonRect = uploadButton.getBoundingClientRect();
         const isOverButton =
             e.clientX >= buttonRect.left &&
             e.clientX <= buttonRect.right &&
@@ -148,7 +211,7 @@ function init() {
     });
 
     // 处理点击上传
-    button.addEventListener('click', () => {
+    uploadButton.addEventListener('click', () => {
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'image/*';
