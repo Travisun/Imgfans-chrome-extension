@@ -67,11 +67,11 @@ export default defineConfig({
                 )
 
                 // 复制图标
-                const icons = ['16', '48', '128']
+                const icons = ['16', '19','32','38','48', '128']
                 icons.forEach(size => {
                     copyFiles(
-                        resolve(__dirname, `public/icons/icon-${size}.png`),
-                        resolve(__dirname, `dist/icons/icon-${size}.png`)
+                        resolve(__dirname, `public/icons/icon${size}.png`),
+                        resolve(__dirname, `dist/icons/icon${size}.png`)
                     )
                 })
 
