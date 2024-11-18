@@ -6,7 +6,7 @@
         <HomeView ref="homeViewRef" :onSettingsClick="() => activeTab = 'settings'" />
       </div>
 
-      <div v-show="activeTab === 'settings'" class="p-4">
+      <div v-show="activeTab === 'settings'" class="p-4 bg-[#f3f4f6]">
         <SettingsForm  @settings-saved="handleSettingsSaved" />
       </div>
     </div>
@@ -63,7 +63,6 @@ const handleSettingsSaved = () => {
   // 切换到 home 标签
   activeTab.value = 'home'
   // 刷新 home 页面数据
-  console.log(2000)
   console.log(homeViewRef)
   homeViewRef.value?.refreshData()
 }
