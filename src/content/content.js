@@ -275,15 +275,89 @@ function isDomainAllowed(currentDomain, allowedDomains) {
     return allowedDomains.some(domain => {
         // 处理空值
         if (!domain) return false;
+        return currentDomain.includes(domain);
+    });
+}
 
-        // 转换为正则表达式模式
-        const pattern = domain.trim()
-            .replace(/\./g, '\\.')  // 转义点号
-            .replace(/\*/g, '.*');  // 将星号转换为通配符
+// 缓存相关常量
+const CACHE_CONSTANTS = {
+    INITIAL_CACHE_DAYS: 7,          // 初始缓存有效期（天）
+    P1_RETRY_HOURS: 2,              // P1阶段重试间隔（小时）
+    P1_MAX_RETRIES: 5,              // P1阶段最大重试次数
+    P2_RETRY_DAYS: 1,               // P2阶段重试间隔（天）
+    STORAGE_KEYS: {
+        REMOTE_DOMAINS: 'wpd_remote',
+        CACHE_TIME: 'wpd_cached_at',
+        RETRY_COUNT: 'wpd_retry_count',
+        RETRY_PHASE: 'wpd_retry_phase'
+    }
+};
 
-        // 确保完全匹配
-        const regex = new RegExp(`^${pattern}$`);
-        return regex.test(currentDomain);
+// 检查缓存是否过期
+async function isCacheExpired() {
+    const {
+        wpd_cached_at: cachedAt,
+        wpd_retry_count: retryCount,
+        wpd_retry_phase: retryPhase
+    } = await chrome.storage.sync.get([
+        CACHE_CONSTANTS.STORAGE_KEYS.CACHE_TIME,
+        CACHE_CONSTANTS.STORAGE_KEYS.RETRY_COUNT,
+        CACHE_CONSTANTS.STORAGE_KEYS.RETRY_PHASE
+    ]);
+
+    if (!cachedAt) return true;
+
+    const now = new Date();
+    const cachedTime = new Date(cachedAt);
+
+    // 根据重试阶段计算有效期
+    if (retryPhase === 'P1' && retryCount <= CACHE_CONSTANTS.P1_MAX_RETRIES) {
+        // P1阶段：检查小时级别的过期
+        const validUntil = new Date(cachedTime.getTime() + retryCount * CACHE_CONSTANTS.P1_RETRY_HOURS * 3600000);
+        return now > validUntil;
+    } else if (retryPhase === 'P2') {
+        // P2阶段：检查天级别的过期
+        const validUntil = new Date(cachedTime.getTime() + CACHE_CONSTANTS.P2_RETRY_DAYS * 86400000);
+        return now > validUntil;
+    }
+
+    // 正常缓存：7天有效期
+    const validUntil = new Date(cachedTime.getTime() + CACHE_CONSTANTS.INITIAL_CACHE_DAYS * 86400000);
+    return now > validUntil;
+}
+
+// 更新缓存的失败处理
+async function handleCacheUpdateFailure() {
+    const { wpd_retry_count: currentRetryCount, wpd_retry_phase: currentPhase } =
+        await chrome.storage.sync.get([
+            CACHE_CONSTANTS.STORAGE_KEYS.RETRY_COUNT,
+            CACHE_CONSTANTS.STORAGE_KEYS.RETRY_PHASE
+        ]);
+
+    let retryCount = (currentRetryCount || 0) + 1;
+    let phase = currentPhase || 'P1';
+    let newCachedAt = new Date().toISOString();
+
+    if (phase === 'P1' && retryCount > CACHE_CONSTANTS.P1_MAX_RETRIES) {
+        // 进入 P2 阶段
+        phase = 'P2';
+        retryCount = 1;
+    }
+
+    await chrome.storage.sync.set({
+        [CACHE_CONSTANTS.STORAGE_KEYS.CACHE_TIME]: newCachedAt,
+        [CACHE_CONSTANTS.STORAGE_KEYS.RETRY_COUNT]: retryCount,
+        [CACHE_CONSTANTS.STORAGE_KEYS.RETRY_PHASE]: phase
+    });
+}
+
+// 成功更新缓存
+async function updateCache(domains) {
+    await chrome.storage.sync.set({
+        [CACHE_CONSTANTS.STORAGE_KEYS.REMOTE_DOMAINS]: JSON.stringify(domains),
+        [CACHE_CONSTANTS.STORAGE_KEYS.CACHE_TIME]: new Date().toISOString(),
+        [CACHE_CONSTANTS.STORAGE_KEYS.RETRY_COUNT]: 0,
+        [CACHE_CONSTANTS.STORAGE_KEYS.RETRY_PHASE]: null
     });
 }
 
@@ -376,12 +450,43 @@ function initializeButtonEvents() {
     });
 }
 
+// 获取远程域名列表（带缓存机制）
+async function getRemoteDomains() {
+    try {
+        const expired = await isCacheExpired();
+
+        if (!expired) {
+            // 使用缓存的数据
+            const { wpd_remote } = await chrome.storage.sync.get(CACHE_CONSTANTS.STORAGE_KEYS.REMOTE_DOMAINS);
+            return wpd_remote ? JSON.parse(wpd_remote) : [];
+        }
+
+        // 尝试获取新数据
+        const newDomains = await fetchWebsitePolicyDomains();
+
+        if (newDomains.length > 0) {
+            // 更新成功，重置缓存状态
+            await updateCache(newDomains);
+            return newDomains;
+        } else {
+            // 获取失败，执行失败处理策略
+            await handleCacheUpdateFailure();
+
+            // 返回旧的缓存数据
+            const { wpd_remote } = await chrome.storage.sync.get(CACHE_CONSTANTS.STORAGE_KEYS.REMOTE_DOMAINS);
+            return wpd_remote ? JSON.parse(wpd_remote) : [];
+        }
+    } catch (error) {
+        console.error('Error in getRemoteDomains:', error);
+        // 发生错误时返回缓存数据
+        const { wpd_remote } = await chrome.storage.sync.get(CACHE_CONSTANTS.STORAGE_KEYS.REMOTE_DOMAINS);
+        return wpd_remote ? JSON.parse(wpd_remote) : [];
+    }
+}
+
 // 初始化
 async function init() {
     try {
-
-        // 获取当前页面的域名
-        const domain = window.location.hostname;
         // 先获取本地设置
         const {website_policy, website_policy_domains, apiKey} = await new Promise((resolve) => {
             chrome.storage.sync.get(['website_policy', 'website_policy_domains', 'apiKey'], (result) => {
@@ -413,10 +518,10 @@ async function init() {
             return;
         }
 
-        // 如果本地白名单不匹配，且有API密钥，则检查远程白名单
+        // 检查远程白名单（使用缓存机制）
         if (apiKey) {
-            const serverDomains = await fetchWebsitePolicyDomains();
-            if (isDomainAllowed(currentDomain, serverDomains)) {
+            const remoteDomains = await getRemoteDomains();
+            if (isDomainAllowed(currentDomain, remoteDomains)) {
                 uploadButton = createFloatingButton();
                 initializeButtonEvents();
                 return;
