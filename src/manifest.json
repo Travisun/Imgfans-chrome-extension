@@ -25,7 +25,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["activeTab"],
+      "matches": ["https://*/*"],
       "css": ["content/content.css"],
       "js": ["content/content.js"]
     }
@@ -33,7 +33,7 @@
   "web_accessible_resources": [
     {
       "resources": ["icons/*", "assets/*"],
-      "matches": ["activeTab"]
+      "matches": ["https://*/*"]
     }
   ]
 }
