@@ -266,22 +266,64 @@ async function uploadFile(file) {
     }
 }
 
+// 域名检查函数
+function isDomainAllowed(currentDomain, allowedDomains) {
+    if (!Array.isArray(allowedDomains) || allowedDomains.length === 0) {
+        return false;
+    }
 
-// 初始化
-async function init() {
-    // 获取当前页面的域名
-    const domain = window.location.hostname;
-    console.log(domain);
-    // 从存储中获取 API Key
-    const apiKey = await new Promise((resolve) => {
-        chrome.storage.sync.get(['apiKey'], (result) => {
-            resolve(result.apiKey);
-        });
+    return allowedDomains.some(domain => {
+        // 处理空值
+        if (!domain) return false;
+
+        // 转换为正则表达式模式
+        const pattern = domain.trim()
+            .replace(/\./g, '\\.')  // 转义点号
+            .replace(/\*/g, '.*');  // 将星号转换为通配符
+
+        // 确保完全匹配
+        const regex = new RegExp(`^${pattern}$`);
+        return regex.test(currentDomain);
     });
-    console.log(apiKey);
-    // 创建按钮并保存引用
-    uploadButton = createFloatingButton();
+}
 
+// fetchWebsitePolicyDomains 函数保持不变
+async function fetchWebsitePolicyDomains() {
+    try {
+        // 从存储中获取 API Key
+        const apiKey = await new Promise((resolve) => {
+            chrome.storage.sync.get(['apiKey'], (result) => {
+                resolve(result.apiKey);
+            });
+        });
+
+        if (!apiKey) {
+            console.warn('API key not found');
+            return [];
+        }
+
+        const response = await fetch('https://imgfans.com/api/v1/website_policy_domains', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch policy list');
+        }
+
+        const data = await response.json();
+        return data.success ? data.domains : [];
+    } catch (error) {
+        console.error('Error fetching website policy domains:', error);
+        return [];
+    }
+}
+
+// 初始化按钮事件
+function initializeButtonEvents() {
     // 处理拖拽事件
     document.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -332,6 +374,59 @@ async function init() {
 
         input.click();
     });
+}
+
+// 初始化
+async function init() {
+    try {
+
+        // 获取当前页面的域名
+        const domain = window.location.hostname;
+        // 先获取本地设置
+        const {website_policy, website_policy_domains, apiKey} = await new Promise((resolve) => {
+            chrome.storage.sync.get(['website_policy', 'website_policy_domains', 'apiKey'], (result) => {
+                resolve(result);
+            });
+        });
+        // 如果策略关闭，直接创建按钮
+        if (website_policy === false) {
+            uploadButton = createFloatingButton();
+            initializeButtonEvents();
+            return;
+        }
+
+        // 获取当前页面的域名
+        const currentDomain = window.location.hostname;
+
+        // 解析本地配置的域名列表
+        let localDomains = [];
+        try {
+            localDomains = JSON.parse(website_policy_domains || '[]');
+        } catch (e) {
+            console.error('Error parsing local domains:', e);
+        }
+
+        // 先检查本地白名单
+        if (isDomainAllowed(currentDomain, localDomains)) {
+            uploadButton = createFloatingButton();
+            initializeButtonEvents();
+            return;
+        }
+
+        // 如果本地白名单不匹配，且有API密钥，则检查远程白名单
+        if (apiKey) {
+            const serverDomains = await fetchWebsitePolicyDomains();
+            if (isDomainAllowed(currentDomain, serverDomains)) {
+                uploadButton = createFloatingButton();
+                initializeButtonEvents();
+                return;
+            }
+        }
+        // 如果都不匹配，则不显示按钮
+        // console.log('Domain not allowed:', currentDomain);
+    } catch (error) {
+        console.error('Error during initialization:', error);
+    }
 }
 
 // 启动应用
