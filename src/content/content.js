@@ -67,12 +67,10 @@ function createToast(message, duration = 3000) {
 // 创建复制对话框
 function createCopyDialog(fileInfo) {
     const dialog = document.createElement('div');
-    dialog.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-[999999] backdrop-blur-sm';
+    dialog.className = 'imgfans-extension-dialog-overlay';
 
-    // 记录HTML代码
     let htmlEmbedCode = "";
 
-    // 创建临时容器用于保存原始HTML
     const createSafeHtml = (html) => {
         const div = document.createElement('div');
         div.innerHTML = html;
@@ -80,72 +78,71 @@ function createCopyDialog(fileInfo) {
     };
 
     dialog.innerHTML = `
-        <div class="bg-white rounded-lg space-y-6 mb-6 w-full max-w-2xl mx-4">
-            <div class="grid gap-6">
-                <!-- Content Area -->
-                <div class="space-y-4">
+        <div class="imgfans-extension-dialog-content">
+            <div class="imgfans-extension-dialog-body">
+                <div class="imgfans-extension-content-container">
                     <!-- Quick Access Links -->
-                    <div class="flex flex-wrap w-full md:px-6 items-center text-center justify-center gap-4 pt-6">
+                    <div class="imgfans-extension-quick-links">
                         <button
-                            class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-800 text-white rounded-md text-sm font-medium"
+                            class="imgfans-extension-button imgfans-extension-button-primary"
                             onclick="window.open('${fileInfo.url}?w=1', '_blank')"
                         >
-                            <svg t="1731400414598" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12523" width="18" height="18">
-                                <path d="M610.944 461.968C648.384 536.608 593.6 624 510.88 624c-61.76 0-111.44-50.24-111.44-112S448 400 512 400v-80c-112 0-192.56 86.128-192.56 192s85.568 192 191.44 192 192-86.128 192-192c0-30.848-7.472-59.92-20.464-85.76l-71.472 35.728zM510.88 176c-240.64 0-448 225.376-448 336 0 110.64 207.36 336 448 336s448.016-225.36 448.016-336c0-110.624-207.376-336-448-336z m0 592c-207.104 0-368-204.192-368-256 0-51.808 160.896-256 368-256s368 204.192 368 256c0 51.808-160.896 256-368 256z" fill="#ffffff" p-id="12524"></path>
+                            <svg class="imgfans-extension-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M610.944 461.968C648.384 536.608 593.6 624 510.88 624c-61.76 0-111.44-50.24-111.44-112S448 400 512 400v-80c-112 0-192.56 86.128-192.56 192s85.568 192 191.44 192 192-86.128 192-192c0-30.848-7.472-59.92-20.464-85.76l-71.472 35.728zM510.88 176c-240.64 0-448 225.376-448 336 0 110.64 207.36 336 448 336s448.016-225.36 448.016-336c0-110.624-207.376-336-448-336z m0 592c-207.104 0-368-204.192-368-256 0-51.808 160.896-256 368-256s368 204.192 368 256c0 51.808-160.896 256-368 256z" fill="#ffffff"/>
                             </svg>
                             &nbsp;View
                         </button>
                         <button
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                            class="imgfans-extension-button imgfans-extension-button-secondary"
                             onclick="window.open('${fileInfo.downloadUrl}', '_blank')"
                         >
-                            <svg t="1731400379156" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11123" width="18" height="18">
-                                <path d="M565.333333 779.914667l51.445334-54.912a31.733333 31.733333 0 0 1 45.226666-1.226667 32.64 32.64 0 0 1 1.216 45.770667l-97.418666 104a37.034667 37.034667 0 0 1-52.821334 1.397333l-108.362666-104.202667a32.64 32.64 0 0 1-1.152-45.770666 31.733333 31.733333 0 0 1 45.248-1.173334L501.333333 774.421333V512.074667c0-17.877333 14.325333-32.373333 32-32.373334s32 14.506667 32 32.373334v267.84zM512 138.666667c123.018667 0 228.213333 86.709333 259.424 206.88C864.298667 347.146667 938.666667 426.090667 938.666667 522.688c0 97.6-75.914667 177.173333-170.133334 177.173333-17.674667 0-32-14.496-32-32.373333 0-17.877333 14.325333-32.373333 32-32.373333 58.357333 0 106.133333-50.08 106.133334-112.426667 0-62.336-47.776-112.416-106.133334-112.416-5.856 0-11.626667 0.501333-17.301333 1.482667-17.621333 3.050667-34.304-9.098667-37.024-26.986667C698.346667 280.693333 612.714667 203.424 512 203.424c-73.834667 0-140.928 41.536-177.376 107.861333a31.914667 31.914667 0 0 1-30.122667 16.576 140.373333 140.373333 0 0 0-9.568-0.32c-80.149333 0-145.6 68.586667-145.6 153.781334 0 85.184 65.450667 153.792 145.6 153.792 17.674667 0 32 14.496 32 32.373333 0 17.877333-14.325333 32.373333-32 32.373333C178.912 699.861333 85.333333 601.770667 85.333333 481.322667c0-118.314667 90.293333-215.061333 203.456-218.453334C338.090667 186.24 421.013333 138.666667 512 138.666667z" fill="#2c2c2c" p-id="11124"></path>
+                            <svg class="imgfans-extension-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M565.333333 779.914667l51.445334-54.912a31.733333 31.733333 0 0 1 45.226666-1.226667 32.64 32.64 0 0 1 1.216 45.770667l-97.418666 104a37.034667 37.034667 0 0 1-52.821334 1.397333l-108.362666-104.202667a32.64 32.64 0 0 1-1.152-45.770666 31.733333 31.733333 0 0 1 45.248-1.173334L501.333333 774.421333V512.074667c0-17.877333 14.325333-32.373333 32-32.373334s32 14.506667 32 32.373334v267.84zM512 138.666667c123.018667 0 228.213333 86.709333 259.424 206.88C864.298667 347.146667 938.666667 426.090667 938.666667 522.688c0 97.6-75.914667 177.173333-170.133334 177.173333-17.674667 0-32-14.496-32-32.373333 0-17.877333 14.325333-32.373333 32-32.373333 58.357333 0 106.133333-50.08 106.133334-112.426667 0-62.336-47.776-112.416-106.133334-112.416-5.856 0-11.626667 0.501333-17.301333 1.482667-17.621333 3.050667-34.304-9.098667-37.024-26.986667C698.346667 280.693333 612.714667 203.424 512 203.424c-73.834667 0-140.928 41.536-177.376 107.861333a31.914667 31.914667 0 0 1-30.122667 16.576 140.373333 140.373333 0 0 0-9.568-0.32c-80.149333 0-145.6 68.586667-145.6 153.781334 0 85.184 65.450667 153.792 145.6 153.792 17.674667 0 32 14.496 32 32.373333 0 17.877333-14.325333 32.373333-32 32.373333C178.912 699.861333 85.333333 601.770667 85.333333 481.322667c0-118.314667 90.293333-215.061333 203.456-218.453334C338.090667 186.24 421.013333 138.666667 512 138.666667z" fill="#2c2c2c"/>
                             </svg>
                             &nbsp;Download
                         </button>
                         <button
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-                            onclick="this.closest('.fixed').remove()"
+                            class="imgfans-extension-button imgfans-extension-button-secondary"
+                            onclick="this.closest('.imgfans-extension-dialog-overlay').remove()"
                         >
-                            <svg t="1731601188715" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4548" width="18" height="18">
-                                <path d="M512 69.818182c-257.070545 0-465.454545 208.384-465.454545 465.454545 0 257.070545 208.384 465.454545 465.454545 465.454545 257.070545 0 465.454545-208.384 465.454545-465.454545C977.454545 278.202182 769.070545 69.818182 512 69.818182zM512 954.181818c-231.377455 0-418.909091-187.531636-418.909091-418.909091 0-231.377455 187.531636-418.909091 418.909091-418.909091 231.377455 0 418.909091 187.531636 418.909091 418.909091C930.909091 766.650182 743.377455 954.181818 512 954.181818zM725.922909 321.349818c-9.076364-9.076364-23.831273-9.076364-32.907636 0L512 502.365091 330.984727 321.349818c-9.076364-9.076364-23.831273-9.076364-32.907636 0-9.076364 9.076364-9.076364 23.831273 0 32.907636l181.015273 181.015273-181.015273 181.015273c-9.076364 9.076364-9.076364 23.831273 0 32.907636 9.076364 9.076364 23.831273 9.076364 32.907636 0L512 568.180364l181.015273 181.015273c9.076364 9.076364 23.831273 9.076364 32.907636 0 9.076364-9.076364 9.076364-23.831273 0-32.907636L544.907636 535.272727l181.015273-181.015273C734.999273 345.181091 734.999273 330.426182 725.922909 321.349818z" fill="#707070" p-id="4549"></path>
+                            <svg class="imgfans-extension-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M512 69.818182c-257.070545 0-465.454545 208.384-465.454545 465.454545 0 257.070545 208.384 465.454545 465.454545 465.454545 257.070545 0 465.454545-208.384 465.454545-465.454545C977.454545 278.202182 769.070545 69.818182 512 69.818182zM512 954.181818c-231.377455 0-418.909091-187.531636-418.909091-418.909091 0-231.377455 187.531636-418.909091 418.909091-418.909091 231.377455 0 418.909091 187.531636 418.909091 418.909091C930.909091 766.650182 743.377455 954.181818 512 954.181818zM725.922909 321.349818c-9.076364-9.076364-23.831273-9.076364-32.907636 0L512 502.365091 330.984727 321.349818c-9.076364-9.076364-23.831273-9.076364-32.907636 0-9.076364 9.076364-9.076364 23.831273 0 32.907636l181.015273 181.015273-181.015273 181.015273c-9.076364 9.076364-9.076364 23.831273 0 32.907636 9.076364 9.076364 23.831273 9.076364 32.907636 0L512 568.180364l181.015273 181.015273c9.076364 9.076364 23.831273 9.076364 32.907636 0 9.076364-9.076364 9.076364-23.831273 0-32.907636L544.907636 535.272727l181.015273-181.015273C734.999273 345.181091 734.999273 330.426182 725.922909 321.349818z" fill="#707070"/>
                             </svg>
                             &nbsp; Close
                         </button>
                     </div>
 
                     <!-- File Information and Copy Sections -->
-                    <div class="space-y-3 p-6 w-full">
-                        <h3 class="text-lg max-w-[78vw] font-medium text-gray-900 overflow-hidden whitespace-nowrap truncate">
+                    <div class="imgfans-extension-content-section">
+                        <h3 class="imgfans-extension-file-name">
                             File Name: ${fileInfo.name}
                         </h3>
                         ${Object.entries(fileInfo.references).map(([key, ref]) => {
-                            // 对HTML代码进行编码，用于存储在data-copy属性中
                             const encodedCode = ref.code.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
                             let htmlEncoded = false;
-                            // 考虑修复HTML代码问题
                             if (ref.label.includes('HTML')) {
                                 htmlEmbedCode = ref.code;
                                 htmlEncoded = true;
                             }
                             return `
-                                <div class="max-w-[78vw] space-y-2">
-                                    <div class="flex w-full items-center justify-between">
-                                        <span class="text-sm text-gray-500">${ref.label}</span>
+                                <div class="imgfans-extension-reference-item">
+                                    <div class="imgfans-extension-reference-header">
+                                        <span class="imgfans-extension-reference-label">${ref.label}</span>
                                         <button
-                                            class="flex items-center space-x-1 text-sm text-blue-600 hover:text-blue-700"
+                                            class="imgfans-extension-copy-button"
                                             data-copy="${encodedCode}"
                                         >
-                                            <svg t="1731399979030" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6040" width="16" height="16">
-                                                <path d="M640 42.666667a85.333333 85.333333 0 0 1 85.333333 85.333333h42.666667a128 128 0 0 1 128 128v597.333333a128 128 0 0 1-128 128H256a128 128 0 0 1-128-128V256a128 128 0 0 1 128-128h42.666667a85.333333 85.333333 0 0 1 85.333333-85.333333h256z m0 256H384a85.333333 85.333333 0 0 1-85.333333-85.333334H256a42.666667 42.666667 0 0 0-42.666667 42.666667v597.333333a42.666667 42.666667 0 0 0 42.666667 42.666667h512a42.666667 42.666667 0 0 0 42.666667-42.666667V256a42.666667 42.666667 0 0 0-42.666667-42.666667h-42.666667a85.333333 85.333333 0 0 1-85.333333 85.333334z m0-170.666667H384v85.333333h256V128z" p-id="6041" fill="#2563eb"></path>
+                                            <svg class="imgfans-extension-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M640 42.666667a85.333333 85.333333 0 0 1 85.333333 85.333333h42.666667a128 128 0 0 1 128 128v597.333333a128 128 0 0 1-128 128H256a128 128 0 0 1-128-128V256a128 128 0 0 1 128-128h42.666667a85.333333 85.333333 0 0 1 85.333333-85.333333h256z m0 256H384a85.333333 85.333333 0 0 1-85.333333-85.333334H256a42.666667 42.666667 0 0 0-42.666667 42.666667v597.333333a42.666667 42.666667 0 0 0 42.666667 42.666667h512a42.666667 42.666667 0 0 0 42.666667-42.666667V256a42.666667 42.666667 0 0 0-42.666667-42.666667h-42.666667a85.333333 85.333333 0 0 1-85.333333 85.333334z m0-170.666667H384v85.333333h256V128z" fill="currentColor"/>
                                             </svg>
                                             <span>Copy</span>
                                         </button>
                                     </div>
                                     <div class="relative">
-                                    ${htmlEncoded ? '<pre class="bg-gray-50 rounded-lg p-3 text-sm text-gray-700 overflow-x-auto" id="imgfans-code-html"></pre>' :
-                                '<pre class="bg-gray-50 rounded-lg p-3 text-sm text-gray-700 overflow-x-auto">'+ref.code+'</pre>'}
+                                        ${htmlEncoded ? 
+                                            '<pre class="imgfans-extension-code-block" id="imgfans-code-html"></pre>' :
+                                            '<pre class="imgfans-extension-code-block">'+ref.code+'</pre>'
+                                        }
                                     </div>
                                 </div>
                             `;
@@ -156,26 +153,21 @@ function createCopyDialog(fileInfo) {
         </div>
     `;
 
-    // Handle copy button clicks
     dialog.addEventListener('click', async (e) => {
-        const copyButton = e.target.closest('button[data-copy]');
+        const copyButton = e.target.closest('.imgfans-extension-copy-button');
         if (copyButton) {
-            const code = copyButton.dataset.copy;
             try {
-                // 解码HTML内容
                 const code = copyButton.dataset.copy.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
                 await navigator.clipboard.writeText(code);
 
-                // Update button content to show copied state
                 const originalContent = copyButton.innerHTML;
                 copyButton.innerHTML = `
-                    <svg t="1731400131067" class="icon" viewBox="0 0 1336 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9911" width="18" height="18">
-                        <path d="M49.588224 883.816448M1139.531776 883.816448M86.939648 862.977024M538.459136 960.381952c109.876224-153.544704 223.55968-289.842176 308.03968-385.787904 49.87392-56.639488 96.715776-108.155904 141.549568-154.500096 40.576-41.945088 80.805888-80.405504 119.478272-116.59264 65.92-61.693952 142.984192-130.034688 191.446016-159.30368l-61.891584-82.050048c-89.732096 56.139776-176.10752 116.103168-242.799616 162.18112-38.863872 26.855424-74.928128 52.667392-108.915712 77.252608-33.668096 24.356864-68.429824 51.106816-105.081856 79.166464-63.633408 48.712704-145.388544 114.194432-224.555008 181.860352L357.07904 374.989824 123.885568 558.770176 538.459136 960.381952zM1335.92064 862.977024" fill="#2563eb" p-id="9912"></path>
+                    <svg class="imgfans-extension-icon" viewBox="0 0 1336 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M49.588224 883.816448M1139.531776 883.816448M86.939648 862.977024M538.459136 960.381952c109.876224-153.544704 223.55968-289.842176 308.03968-385.787904 49.87392-56.639488 96.715776-108.155904 141.549568-154.500096 40.576-41.945088 80.805888-80.405504 119.478272-116.59264 65.92-61.693952 142.984192-130.034688 191.446016-159.30368l-61.891584-82.050048c-89.732096 56.139776-176.10752 116.103168-242.799616 162.18112-38.863872 26.855424-74.928128 52.667392-108.915712 77.252608-33.668096 24.356864-68.429824 51.106816-105.081856 79.166464-63.633408 48.712704-145.388544 114.194432-224.555008 181.860352L357.07904 374.989824 123.885568 558.770176 538.459136 960.381952zM1335.92064 862.977024" fill="currentColor"/>
                     </svg>
                     <span>Copied</span>
                 `;
 
-                // Reset button content after 2 seconds
                 setTimeout(() => {
                     copyButton.innerHTML = originalContent;
                 }, 2000);
@@ -187,17 +179,9 @@ function createCopyDialog(fileInfo) {
     });
 
     document.body.appendChild(dialog);
-    // 填写HTML代码
-    document.getElementById('imgfans-code-html').textContent= htmlEmbedCode;
-    // Add style for pre elements
-    const style = document.createElement('style');
-    style.textContent = `
-        .fixed pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-    `;
-    document.head.appendChild(style);
+    if (document.getElementById('imgfans-code-html')) {
+        document.getElementById('imgfans-code-html').textContent = htmlEmbedCode;
+    }
 }
 // 上传文件
 async function uploadFile(file) {

@@ -1,298 +1,293 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+.imgfans-floating-button {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    background-color: transparent;
+    border: 2px solid #16a34a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    z-index: 999999;
+    transition: all 0.3s ease;
+}
+.imgfans-floating-button>svg {
+    width: 50px !important;
+    height: 50px !important;
+    margin-top: 5px !important;
+    /*margin-right: 4px !important;*/
+}
+.imgfans-floating-button>svg>path {
+    fill: #16a34a;
+}
+.imgfans-floating-button:hover > svg > path {
+    fill: #ffffff;
+}
+.imgfans-floating-button:hover {
+    transform: translateY(-50%) scale(1.1);
+    background-color: #16a34a;
+}
 
-@layer components {
-    .imgfans-floating-button {
-        position: fixed;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 60px;
-        height: 60px;
-        background-color: transparent;
-        border: 2px solid #16a34a;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        z-index: 999999;
-        transition: all 0.3s ease;
-    }
-    .imgfans-floating-button>svg {
-        width: 50px !important;
-        height: 50px !important;
-        margin-top: 5px !important;
-        /*margin-right: 4px !important;*/
-    }
-    .imgfans-floating-button>svg>path {
-        fill: #16a34a;
-    }
-    .imgfans-floating-button:hover > svg > path {
-        fill: #ffffff;
-    }
-    .imgfans-floating-button:hover {
-        transform: translateY(-50%) scale(1.1);
-        background-color: #16a34a;
-    }
+.imgfans-floating-button.drag-over {
+    transform: translateY(-50%) scale(1.2);
+    background-color: #077860;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
 
-    .imgfans-floating-button.drag-over {
-        transform: translateY(-50%) scale(1.2);
-        background-color: #077860;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-    }
+.imgfans-floating-button svg {
+    width: 30px;
+    height: 30px;
+    color: white;
+}
 
-    .imgfans-floating-button svg {
-        width: 30px;
-        height: 30px;
-        color: white;
-    }
+.imgfans-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    background-color: #1f2937;
+    color: white;
+    border-radius: 8px;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    z-index: 1000000;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
 
-    .imgfans-toast {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 12px 24px;
-        background-color: #1f2937;
-        color: white;
-        border-radius: 8px;
-        font-family: system-ui, -apple-system, sans-serif;
-        font-size: 14px;
-        z-index: 1000000;
-        animation: slideIn 0.3s ease;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
     }
-
-    @keyframes slideIn {
-        from {
-            transform: translateY(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
-    .imgfans-copy-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 999999;
-    }
-
-    .imgfans-copy-dialog {
-        background-color: white;
-        padding: 24px;
-        border-radius: 12px;
-        width: 90%;
-        max-width: 500px;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-
-    .imgfans-copy-dialog h3 {
-        margin: 0 0 16px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #1f2937;
-    }
-
-    .imgfans-copy-options {
-        margin-bottom: 16px;
-    }
-
-    .imgfans-copy-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 8px;
-        padding: 8px;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-
-    .imgfans-copy-item:hover {
-        background-color: #f3f4f6;
-    }
-
-    .imgfans-copy-item span {
-        flex: 1;
-        font-size: 14px;
-        color: #4b5563;
-    }
-
-    .imgfans-copy-item button {
-        padding: 4px 12px;
-        background-color: #4f46e5;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 12px;
-        cursor: pointer;
-    }
-
-    .imgfans-copy-item button:hover {
-        background-color: #4338ca;
-    }
-
-    .imgfans-close-button {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 4px;
-    }
-
-    /* 基础按钮样式 */
-    .imgfans-floating-button {
-        position: fixed;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 60px;
-        height: 60px;
-        /*background-color: #4f46e5;*/
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        z-index: 999999;
-        transition: all 0.3s ease;
-    }
-
-    /* 悬停效果 */
-    .imgfans-floating-button:hover {
-        transform: translateY(-50%) scale(1.1);
-        /*background-color: #4338ca;*/
-    }
-
-    /* 拖拽效果 */
-    .imgfans-floating-button.drag-over {
-        transform: translateY(-50%) scale(1.2);
-        /*background-color: #3730a3;*/
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-    }
-
-    /* 图标样式 */
-    .imgfans-floating-button svg {
-        width: 30px;
-        height: 30px;
-        color: white;
-        z-index: 1;
-    }
-
-    /* 进度条容器 */
-    .imgfans-floating-button::before {
-        content: '';
-        position: absolute;
-        top: -4px;
-        left: -4px;
-        right: -4px;
-        bottom: -4px;
-        border: 4px solid transparent;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-        pointer-events: none;
-    }
-
-    /* 上传中的进度动画 */
-    .imgfans-floating-button.uploading::before {
-        border-right: 4px solid #10B981;
-        border-top: 4px solid #10B981;
-        animation: upload-spin 1s linear infinite;
-    }
-
-    /* 等待响应的呼吸动画 */
-    .imgfans-floating-button.waiting::before {
-        border: 4px solid #F59E0B;
-        animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    /* 上传旋转动画 */
-    @keyframes upload-spin {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    /* 等待呼吸动画 */
-    @keyframes pulse {
-        0%, 100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 0.5;
-            transform: scale(1.1);
-        }
-    }
-
-    /* Toast 通知样式 */
-    .imgfans-toast {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 12px 24px;
-        background-color: #1f2937;
-        color: white;
-        border-radius: 8px;
-        font-family: system-ui, -apple-system, sans-serif;
-        font-size: 14px;
-        z-index: 1000000;
-        animation: slideIn 0.3s ease;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    @keyframes slideIn {
-        from {
-            transform: translateY(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
-    /* 复制对话框样式保持不变 */
-    .imgfans-copy-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 999999;
-    }
-
-    .imgfans-copy-dialog {
-        background-color: white;
-        padding: 24px;
-        border-radius: 12px;
-        width: 90%;
-        max-width: 500px;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        position: relative;
+    to {
+        transform: translateY(0);
+        opacity: 1;
     }
 }
+
+.imgfans-copy-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+}
+
+.imgfans-copy-dialog {
+    background-color: white;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.imgfans-copy-dialog h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.imgfans-copy-options {
+    margin-bottom: 16px;
+}
+
+.imgfans-copy-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.imgfans-copy-item:hover {
+    background-color: #f3f4f6;
+}
+
+.imgfans-copy-item span {
+    flex: 1;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.imgfans-copy-item button {
+    padding: 4px 12px;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.imgfans-copy-item button:hover {
+    background-color: #4338ca;
+}
+
+.imgfans-close-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+/* 基础按钮样式 */
+.imgfans-floating-button {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    /*background-color: #4f46e5;*/
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 999999;
+    transition: all 0.3s ease;
+}
+
+/* 悬停效果 */
+.imgfans-floating-button:hover {
+    transform: translateY(-50%) scale(1.1);
+    /*background-color: #4338ca;*/
+}
+
+/* 拖拽效果 */
+.imgfans-floating-button.drag-over {
+    transform: translateY(-50%) scale(1.2);
+    /*background-color: #3730a3;*/
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+/* 图标样式 */
+.imgfans-floating-button svg {
+    width: 30px;
+    height: 30px;
+    color: white;
+    z-index: 1;
+}
+
+/* 进度条容器 */
+.imgfans-floating-button::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 4px solid transparent;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+/* 上传中的进度动画 */
+.imgfans-floating-button.uploading::before {
+    border-right: 4px solid #10B981;
+    border-top: 4px solid #10B981;
+    animation: upload-spin 1s linear infinite;
+}
+
+/* 等待响应的呼吸动画 */
+.imgfans-floating-button.waiting::before {
+    border: 4px solid #F59E0B;
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 上传旋转动画 */
+@keyframes upload-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 等待呼吸动画 */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+}
+
+/* Toast 通知样式 */
+.imgfans-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    background-color: #1f2937;
+    color: white;
+    border-radius: 8px;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    z-index: 1000000;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 复制对话框样式保持不变 */
+.imgfans-copy-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+}
+
+.imgfans-copy-dialog {
+    background-color: white;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
 
 @keyframes upload-spin {
     from {
@@ -319,4 +314,207 @@
     to {
         @apply translate-y-0 opacity-100;
     }
+}
+
+/* Base dialog container */
+.imgfans-extension-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  backdrop-filter: blur(4px);
+}
+
+.imgfans-extension-dialog-content {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 42rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.imgfans-extension-dialog-body {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* Quick access links section */
+.imgfans-extension-quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .imgfans-extension-quick-links {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Button styles */
+.imgfans-extension-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  line-height: 1.25rem;
+}
+
+.imgfans-extension-button-primary {
+  background-color: #3b82f6;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+.imgfans-extension-button-primary:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.06);
+}
+
+.imgfans-extension-button-secondary {
+  border: 1px solid #e5e7eb;
+  color: #4b5563;
+  background-color: #fff;
+}
+
+.imgfans-extension-button-secondary:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Content section */
+.imgfans-extension-content-section {
+  width: 100%;
+}
+
+.imgfans-extension-content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.imgfans-extension-file-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  max-width: 78vw;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5rem;
+  line-height: 1.75rem;
+    padding: 0 1.5rem
+}
+
+/* Reference items */
+.imgfans-extension-reference-item {
+  max-width: 78vw;
+  margin-bottom: 1.25rem;
+  padding: 0 1.5rem;
+}
+
+.imgfans-extension-reference-header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.imgfans-extension-reference-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.imgfans-extension-copy-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  color: #2563eb;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.imgfans-extension-copy-button:hover {
+  color: #1d4ed8;
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+.imgfans-extension-copy-button:active {
+  transform: translateY(1px);
+}
+
+/* Code display */
+.imgfans-extension-code-block {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  color: #334155;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+    margin-top: 0px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+}
+
+.imgfans-extension-code-block::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.imgfans-extension-code-block::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.imgfans-extension-code-block::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.imgfans-extension-code-block::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Icons */
+.imgfans-extension-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Animation for copied state */
+@keyframes imgfans-extension-fade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.imgfans-extension-copied {
+  animation: imgfans-extension-fade 1s ease;
 }
