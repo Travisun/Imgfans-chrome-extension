@@ -268,7 +268,17 @@ async function uploadFile(file) {
 
 
 // 初始化
-function init() {
+async function init() {
+    // 获取当前页面的域名
+    const domain = window.location.hostname;
+    console.log(domain);
+    // 从存储中获取 API Key
+    const apiKey = await new Promise((resolve) => {
+        chrome.storage.sync.get(['apiKey'], (result) => {
+            resolve(result.apiKey);
+        });
+    });
+    console.log(apiKey);
     // 创建按钮并保存引用
     uploadButton = createFloatingButton();
 
