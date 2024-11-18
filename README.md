@@ -9,6 +9,12 @@ ImgFans Chrome Extension transforms how you handle images on the web, offering a
 
 ## 🌟 Why ImgFans?
 
+<div align="center">
+    <a href="https://imgfans.com?utm=readme" target="_blank">
+        <img src="https://imgfans.com/_D4x2V" alt="ImgFans Logo" style="border-radius: 10px;"/>
+    </a>
+</div>
+
 In today's digital landscape, sharing images across platforms often involves multiple steps, security concerns, and storage limitations. ImgFans addresses these challenges by providing:
 
 - **Instant Upload Anywhere**: Upload images directly from any webpage with our floating button interface
