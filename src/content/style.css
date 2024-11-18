@@ -11,7 +11,7 @@
         width: 60px;
         height: 60px;
         background-color: transparent;
-        border: 2px solid #0b9477;
+        border: 2px solid #16a34a;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -22,20 +22,20 @@
         transition: all 0.3s ease;
     }
     .imgfans-floating-button>svg {
-        width: 58px !important;
-        height: 58px !important;
-        margin-top: 8px !important;
-        margin-right: 4px !important;
+        width: 50px !important;
+        height: 50px !important;
+        margin-top: 5px !important;
+        /*margin-right: 4px !important;*/
     }
     .imgfans-floating-button>svg>path {
-        fill: rgb(11, 148, 119);
+        fill: #16a34a;
     }
     .imgfans-floating-button:hover > svg > path {
         fill: #ffffff;
     }
     .imgfans-floating-button:hover {
         transform: translateY(-50%) scale(1.1);
-        background-color: #0b9477;
+        background-color: #16a34a;
     }
 
     .imgfans-floating-button.drag-over {
