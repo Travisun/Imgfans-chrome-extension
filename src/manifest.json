@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Imgfans",
   "version": "1.0.0",
-  "description": "Upload & Share Image Hotlink, Free Image Hosting Library. Easy to upload your image and pdf files by a drag/paste operation.",
+  "description": "Upload, share, and manage your images effortlessly. One-click upload with drag & drop support and instant sharing links.",
   "permissions": [
     "storage"
   ],
