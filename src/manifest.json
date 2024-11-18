@@ -1,23 +1,26 @@
 {
   "manifest_version": 3,
-  "name": "Vue3 Chrome Extension",
+  "name": "Imgfans",
   "version": "1.0.0",
-  "description": "A simple Chrome extension built with Vue 3",
+  "description": "Upload & Share Image Hotlink, Free Image Hosting Library. Easy to upload your image and pdf files by a drag/paste operation.",
   "permissions": [
     "storage"
   ],
   "action": {
     "default_popup": "popup/index.html",
     "default_icon": {
-      "16": "icons/icon-16.png",
-      "48": "icons/icon-48.png",
-      "128": "icons/icon-128.png"
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
     }
   },
   "icons": {
-    "16": "icons/icon-16.png",
-    "48": "icons/icon-48.png",
-    "128": "icons/icon-128.png"
+    "16": "icon16.png",
+    "19": "icon19.png",
+    "32": "icon32.png",
+    "38": "icon38.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "content_scripts": [
     {
