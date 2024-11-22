@@ -1,12 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Imgfans",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Upload, share, and manage your images effortlessly. One-click upload with drag & drop support and instant sharing links.",
   "permissions": [
     "storage",
     "activeTab"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup/index.html",
     "default_icon": {

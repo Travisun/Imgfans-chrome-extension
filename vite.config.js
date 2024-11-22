@@ -81,6 +81,11 @@ export default defineConfig({
                     resolve(__dirname, 'dist/popup/index.html')
                 )
 
+                copyFiles(
+                    resolve(__dirname, 'src/background.js'),
+                    resolve(__dirname, 'dist/background.js')
+                )
+
                 // 清理空目录
                 try {
                     // 移除 dist/src/popup
