@@ -7,6 +7,12 @@
 
 ImgFans Chrome Extension transforms how you handle images on the web, offering a seamless, secure, and efficient solution for image hosting and sharing. With just one click, you can upload, manage, and share images from any webpage, making it an indispensable tool for content creators, developers, and professionals alike.
 
+<div align="center">
+
+[![Chrome Extension](https://img.shields.io/badge/Chrome-Install%20imgfans%20Extension-blue?logo=google-chrome&style=for-the-badge)](https://chromewebstore.google.com/detail/imgfans/cpjpaapajlmhjdepjjogclacfflnkhhe)
+
+</div>
+
 ## 🌟 Why ImgFans?
 
 <div align="center">
